@@ -48,7 +48,8 @@ public class CarService {
     }
 
     public void deleteCarByID(Integer idNumber){
-        getCarOrThrowException(idNumber);
+      Car car = getCarOrThrowException(idNumber);
+
         int deleted = carDAO.deleteCar(idNumber);
         if (deleted != 1){
             throw new IllegalStateException("could not delete car");
@@ -58,6 +59,7 @@ public class CarService {
 
 
     public void updateCar (Integer idNumber, Car update){
+        getCarOrThrowException(idNumber);
         carDAO.updateCar(idNumber, update);
     }
 }

@@ -9,7 +9,7 @@ public class Car {
     private Brand brand;
     private Double price;
 
-    public Car(){}
+
 
     public Car(Integer id, String regNumber, Brand brand, Double price) {
         this.id = id;

@@ -17,11 +17,25 @@ public class CarDataAccessService implements CarDAO {
 
     @Override
     public Car selectCarById(Integer id) {
+
+
         String sql = "SELECT id, regnumber, brand, price FROM car WHERE id = ?";
 
-        jdbcTemplate.query(sql, );
-        return null;
-    }
+        RowMapper<Car> idRowMapper = (rs, rowNum) -> {
+            return new Car(
+                    rs.getInt("id"),
+                    rs.getString("regnumber"),
+                    Brand.valueOf(rs.getString("brand")),
+                    rs.getDouble("price")
+            );
+
+        };
+
+            List<Car> list = jdbcTemplate.query(sql, idRowMapper, id);
+            return list.get(0);
+
+
+        }
 
     @Override
     public List<Car> selectAllCars() { //never use star, if you have done joins, selecting from multiple tables, star becomes everything, you want to name columns you get back
@@ -62,6 +76,16 @@ INSERT INTO car (regnumber, brand, price) VALUES (?, ?, ?)
 
     @Override
     public int updateCar(Integer id, Car update) {
-        return 0;
+
+        String sql = """
+                UPDATE car SET regnumber = ?, brand = ?, price = ?
+                WHERE id = ?
+                """;
+        System.out.println(update);
+
+        int iDontKnowWhyThisIsAnInt = jdbcTemplate.update(sql, update.getRegNumber(),update.getBrand().name(),update.getPrice(), id);
+
+
+        return iDontKnowWhyThisIsAnInt;
     }
 }
